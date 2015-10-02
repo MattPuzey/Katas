@@ -12,15 +12,15 @@ namespace LibraryStoryCards
     {
         public ICollection<Book> BooksInventory;
 
-        public void GetBookReport(ICollection<Book> inventory, int userInput)
+        public void GetBookReport(ICollection<Book> inventory, bool userInput)
         {
-            IOrderedEnumerable<Book> orderedBookInventory;
+            IOrderedEnumerable<Book> orderedBookInventory = null;
 
-            if (userInput == 1)
+            if (userInput == true)
             {
                  orderedBookInventory = OrderBooksbyAuthor(inventory);
             }
-            else if (userInput == 2)
+            else if (userInput == false)
             {
                 orderedBookInventory = OrderBooksbyTitle(inventory);
             }
@@ -53,9 +53,9 @@ namespace LibraryStoryCards
             return orderedBookInventory;
         }
 
-        public IOrderedEnumerable<Book> SearchforBookByAuthor(string authorName)
+        public IOrderedEnumerable<Book> SearchforBookByAuthor(IOrderedEnumerable<Book> inventory, string userInput)
         {
-            return NotImplementedException;
+            throw new Exception();
         }
     }
 }

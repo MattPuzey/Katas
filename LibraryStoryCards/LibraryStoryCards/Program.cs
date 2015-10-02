@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,22 +12,33 @@ namespace LibraryStoryCards
     {
         private static void Main(string[] args)
         {
+            //Todo Needs demo data 
             Library library = new Library();
 
             var booksInventory = library.BooksInventory;
-            Console.WriteLine("Would you like a book inventory ordered by Author or by Title?");
-            Console.WriteLine("Enter {0} to order by Author or {1} to order by Title:", 1, 2);
-            double result = 0;
+            Console.WriteLine("Would you like an inventory ordered by Author or by Title?");
+            var userInput = readValue();
+
+            if (userInput == 1)
+            {
+                library.GetBookReport(booksInventory, true);
+            }
+            else
+            {
+                library.GetBookReport(booksInventory, false);
+            }
+        }
+
+        public static int readValue()
+        {
+            int result = 0;
             do
             {
-                Console.WriteLine("Enter {0} to order by Author or {1} to order by Title:", 1, 2);
-                string userInputString = Console.ReadLine();
-            } while ((result != 1) || (result != 2));
-             if (result == 1)
-                {
-                    library.GetBookReport(booksInventory, 1);
-                }
-             library.GetBookReport(booksInventory, 2);
-        }
+                string resultString = Console.ReadLine();
+                result = int.Parse(resultString); 
+
+            } while ((result != 1) && (result != 2));
+            return result;
+        }    
     }
 }
