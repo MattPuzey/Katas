@@ -1,1 +1,2 @@
 C:\Users\d-mapu3.DEV\Documents\Visual Studio 2013\Projects\poker-game\Poker\bin\Debug\Poker.exe.config
+C:\Users\Matthew\Documents\Visual Studio 2013\Projects\Katas\pokerKata\26.08.15\Poker\bin\Debug\Poker.exe.config
