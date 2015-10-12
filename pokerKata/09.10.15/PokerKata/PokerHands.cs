@@ -8,6 +8,15 @@ namespace PokerKata
 {
      public static class PokerHands
      {
+            // http://stackoverflow.com/questions/1101841/linq-how-to-perform-max-on-a-property-of-all-objects-in-a-collection-and-ret
+            public static int FindHighcard(ICollection<Card> cardsinHand)
+            {
+                var highCardVal = 2;
+                highCardVal = cardsinHand.Max(x => x.Rank);
+
+                return highCardVal;
+           }
+
             public static bool StraightFlushCheck(ICollection<Card> cardsinHand)
             {
                 // Are all cards in hand of the same Rank?

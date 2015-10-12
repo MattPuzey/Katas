@@ -12,19 +12,15 @@ namespace PokerKata
         {
             Console.WriteLine("Enter hand for player 1 e.g : 2H 3D 5S 9C KD");
             var player1InputString = Console.ReadLine();
-            if (player1InputString != null)
-            {
-                var player1Input = MapInputToHand(player1InputString);
-            }
+            
+            var player1Input = MapInputToHand(player1InputString);
+            
             Console.WriteLine("Enter hand for player 2 e.g : 2C 3H 4S 8C AH");
             var player2InputString = Console.ReadLine();
-            if (player2InputString != null)
-            {
-                var player2Input = MapInputToHand(player2InputString);
-            }
+            var player2Input = MapInputToHand(player2InputString);
 
             ScoringSession scoringSession = new ScoringSession();
-
+            scoringSession.ShowHands(player1Input.Cards, player2Input.Cards);
 
         }
 

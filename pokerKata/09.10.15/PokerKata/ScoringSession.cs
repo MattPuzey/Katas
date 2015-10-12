@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PokerKata;
 
 namespace PokerKata
 {
@@ -31,14 +32,16 @@ namespace PokerKata
             var player2Hand = determineHand(hand2);
             
            
-            var highCard1 = FindHighcard(hand1);
-            var highCard2 = FindHighcard(hand2);
+            var highCard1 = PokerHands.FindHighcard(hand1);
+            var highCard2 = PokerHands.FindHighcard(hand2);
             if (player1Hand > player2Hand)
                 Console.WriteLine("Player 1 wins!");
             else if (player1Hand < player2Hand)
                 Console.WriteLine("Player 2 wins!");
             else if (highCard1 > highCard2)
                 Console.WriteLine("Player 1 wins!");
+            else if (highCard1 < highCard2)
+                Console.WriteLine("Player 2 wins!");
             else
             {
                 Console.WriteLine("Tie!");
@@ -68,14 +71,6 @@ namespace PokerKata
         }
 
 
-        // http://stackoverflow.com/questions/1101841/linq-how-to-perform-max-on-a-property-of-all-objects-in-a-collection-and-ret
-        private int FindHighcard(List<Card> cardsinHand)
-        {
-            var highCardVal = 2; 
-            cardsinHand.
-
-            return highCardVal;
-        }
 
    
     }
