@@ -28,7 +28,6 @@ namespace PokerKata
 
             public static bool FourOfaKindCheck(ICollection<Card> cardsinHand)
             {
-
                 return false;
             }
 
