@@ -84,19 +84,19 @@ namespace YatzyKata
                             OnTwoPairs(rolls);
                             break;
                         case "ThreeOfAKind":
-                            OnTwoPairs(rolls);
+                            OnThreeOfAKind(rolls);
                             break;
                         case "FourOfAKind":
-                            OnTwoPairs(rolls);
+                            OnFourOfAKind(rolls);
                             break;
                         case "SmallStraight":
-                            OnTwoPairs(rolls);
+                            OnSmallStraight(rolls);
                             break;
                         case "LargeStraight":
-                            OnTwoPairs(rolls);
+                            OnLargeStraight(rolls);
                             break;
                        case "FullHouse":
-                            OnTwoPairs(rolls);
+                            OnFullHouse(rolls);
                             break;
                     }
 
@@ -125,51 +125,91 @@ namespace YatzyKata
 
         private static void OnPair(List<int> rolls)
         {
-            //why is list always null? 
-            var duplicates = rolls.GroupBy(x => x).SelectMany(grp => grp.Skip(1));
-            var set = new HashSet<int>(rolls);
-            if (duplicates.C == 1)
+            //Does the list contain any duplicates? (not 3 of kind or higher)
+            //If it contains two sets which is higher?
+
+            IEnumerable<int> duplicates = rolls.GroupBy(x => x).SelectMany(grp => grp.Skip(1));
+            if (duplicates.Count() < 0)
             {
-                //int sumOfDuplicates =  rolls.GroupBy(x => x).SelectMany(grp => grp.)
-                //Score 
+                Score = 0;
             }
+            Score = 2 * duplicates.Last();
         }
 
         private static void OnTwoPairs(List<int> rolls)
         {
-            var handler = TwoPairs;
-            if (handler != null) handler();
+            IEnumerable<int> duplicates = rolls.GroupBy(x => x).SelectMany(grp => grp.Skip(1));
+            if (duplicates.Count() != 2)
+            {
+                Score = 0;
+            }
+            Score += (2*duplicates.First()) + (2*duplicates.Last());
         }
 
         private static void OnThreeOfAKind(List<int> rolls)
         {
-            var handler = ThreeOfAKind;
-            if (handler != null) handler();
+            IEnumerable<int> duplicates = rolls.GroupBy(x => x).SelectMany(grp => grp.Skip(1));
+            var g = duplicates.GroupBy(i => i);
+            
+            foreach (var grp in g)
+            {
+                if (grp.Count() != 3)
+                {
+                    Score = 0;
+                }
+                Score = grp.Key * 3;
+            }
         }
 
         private static void OnFourOfAKind(List<int> rolls)
         {
-            var handler = FourOfAKind;
-            if (handler != null) handler();
+            IEnumerable<int> duplicates = rolls.GroupBy(x => x).SelectMany(grp => grp.Skip(1));
+            var g = duplicates.GroupBy(i => i);
 
+            foreach (var grp in g)
+            {
+                if (grp.Count() != 4)
+                {
+                    Score = 0;
+                }
+                Score += grp.Key * 4;
+            }
         }
 
-        private static void OnSmallStraight()
+        private static void OnSmallStraight(List<int> rolls)
         {
-            var handler = SmallStraight;
-            if (handler != null) handler();
+            if (!(rolls.Contains(1) & rolls.Contains(2) & rolls.Contains(3) & rolls.Contains(4) & rolls.Contains(5)))
+            {
+                Score = 0;
+            }
+            Score += 15;
         }
 
-        private static void OnLargeStraight()
+        private static void OnLargeStraight(List<int> rolls)
         {
-            var handler = LargeStraight;
-            if (handler != null) handler();
+            if (!(rolls.Contains(2) && rolls.Contains(3) && rolls.Contains(4) && rolls.Contains(5) && rolls.Contains(6)))
+            {
+                Score = 0;
+            }
+            Score += 20;
         }
 
-        private static void OnFullHouse()
+        private static void OnFullHouse(List<int> rolls)
         {
-            var handler = FullHouse;
-            if (handler != null) handler();
+            IEnumerable<int> duplicates = rolls.GroupBy(x => x).SelectMany(grp => grp.Skip(1));
+            var g = duplicates.GroupBy(i => i);
+
+            foreach (var grp in g)
+            {
+                if (grp.Count() != 3 && g.Count() != 2)
+                {
+                    Score = 0;
+                }
+               Console.WriteLine("Full House");
+               Score = g.ToList().Take(5).Sum(ints => Score);
+               break;
+            }
+            //is there a duplicate and triple?
         }
     }
 }
