@@ -20,12 +20,11 @@ namespace Calculator
             Assert.That(isRecognisedAsAddition, Is.True);
         }
 
-
         [Test]
-        public void TwoPlusThreeIsFive()
+        public void TwoPlusThreePlusThreeIsEight()
         {
-            int total = _calc.AddNumbers("2 + 3");
-            Assert.AreEqual(5 , total);
+            double result = _calc.AddNumbers("2 + 3 + 3");
+            Assert.AreEqual(8, result);
         }
 
         [Test]
@@ -36,10 +35,10 @@ namespace Calculator
         }
 
         [Test]
-        public void FiveMinusThreeIsTwo()
+        public void FiveMinusThreeMinusThreeIsMinusFour()
         {
-            int total = _calc.SubtractNumbers("5 - 3");
-            Assert.AreEqual(2, total);
+            double result = _calc.SubtractNumbers("5 - 3 - 4");
+            Assert.AreEqual(-2, result);
         }
 
         [Test]
@@ -53,8 +52,8 @@ namespace Calculator
         [Test]
         public void TwoTimesThreeIsSix()
         {
-            int total = _calc.MultiplyNumbers("2 x 3");
-            Assert.AreEqual(6, total);
+            double result = _calc.MultiplyNumbers("2 x 3");
+            Assert.AreEqual(6, result);
         }
 
         [Test]
@@ -65,20 +64,48 @@ namespace Calculator
         }
 
         [Test]
-        public void SixDivideThree()
+        public void SixteenDivideFourDivideTwoIsTwo()
         {
-            int total = _calc.DivideNumbers("6 / 3");
-            Assert.AreEqual(2, total);
+            double result = _calc.DivideNumbers("16 / 4 / 2");
+            Assert.AreEqual(2, result);
         }
 
         [Test]
-        public void BraketsAreHandledFirst()
+        public void PowersAreRecognised()
         {
-            ICollection<string> bracketsList = _calc.IsolateBodmasBrakets("3 + [3 * 2]");
-            string firstBraketContent = bracketsList.First();
-            int result = _calc.GetResultFromSingleStringCalculation(firstBraketContent);
-            Assert.AreEqual(9, result);
+            bool isRecognisedAsPowers = _calc.InputIsPower("2 ^ 3");
+            Assert.That(isRecognisedAsPowers, Is.True);
+        }
 
+        [Test]
+        public void PowersAreCalculated()
+        {
+            double result = _calc.CalculatePower("2 ^ 3 ^ 2");
+            Assert.AreEqual(64, result);
+        }
+
+        [Test]
+        public void BraketsAreIsolated()
+        {
+            ICollection<string> bracketCalculations = _calc.ExtractBodmasBrakets("3 + [3 x 2] - [3 / 4]");
+            Assert.That(bracketCalculations.Last() == "3 / 4", Is.True);
+        }
+
+        [Test]
+        public void SingleOperatorStringInputIsInspectedThenCalculated()
+        {
+            double result1 = _calc.GetResultFromSingleCalculation("3 x 4");
+            Assert.AreEqual(12, result1);
+
+            double result2 = _calc.GetResultFromSingleCalculation("12 / 4");
+            Assert.AreEqual(3, result2);
+        }
+
+        [Test]
+        public void BraketCalculationsAreHandledFirstThenFedBackIntoString()
+        {
+            string result = _calc.BracketIsolationCalculation("3 + [3 x 2]");
+            StringAssert.AreEqualIgnoringCase("3 + 6", result);
         } 
      
 

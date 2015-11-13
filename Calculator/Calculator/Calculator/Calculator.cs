@@ -22,16 +22,16 @@ namespace Calculator
             return false;
         }
 
-        public int AddNumbers(string input)
+        public double AddNumbers(string input)
         {
             input  = input.Trim();
             if (!string.IsNullOrEmpty(input) && InputIsAddtion(input))
             {
                 string[] digitsStrings = input.Split('+');
-                int total = 0;
+                double total = 0;
                 foreach (string digitsString in digitsStrings)
                 {
-                    int i = int.Parse(digitsString);
+                    double i = double.Parse(digitsString);
                     total += i;
                 }
                 return total;
@@ -49,28 +49,25 @@ namespace Calculator
             return false;
         }
 
-        public int SubtractNumbers(string input)
+        public double SubtractNumbers(string input)
         {
-            input = input.Trim();
-            if (!string.IsNullOrEmpty(input) && InputIsSubtraction(input))
+            string trimmedInput = input.Replace(" ", "");
+;            if (!string.IsNullOrEmpty(trimmedInput) && InputIsSubtraction(trimmedInput))
             {
                 string[] digitsStrings = input.Split('-');
                 string firstDigit = digitsStrings[0];
-                string SecondDigit = digitsStrings[1];
-                int total = int.Parse(firstDigit) - int.Parse(SecondDigit);
+                string secondDigit = digitsStrings[1];
+                double total = double.Parse(firstDigit) - double.Parse(secondDigit);
                 if (digitsStrings.Length > 2)
                 {
                     var digitList = new List<string>(digitsStrings);
                     digitList.RemoveAt(0);
-                    digitList.RemoveAt(1);
-                    int additionalSubtraction = 0 ; 
+                    digitList.RemoveAt(0);
                     foreach (string digit in digitList)
                     {
-
-                        int i = int.Parse(digit);
-                        additionalSubtraction = total - i;
+                        double i = double.Parse(digit);
+                        total = total - i;
                     }
-                    total = total - additionalSubtraction;
                 }
                 
                 return total;
@@ -87,30 +84,19 @@ namespace Calculator
             return false;
         }
 
-        public int MultiplyNumbers(string input)
+        public double MultiplyNumbers(string input)
         {
             input = input.Trim();
             if (!string.IsNullOrEmpty(input) && InputIsMultiplication(input))
             {
                 string[] digitsStrings = input.Split('x');
-                string firstDigit = digitsStrings[0];
-                string SecondDigit = digitsStrings[1];
-                int total = int.Parse(firstDigit) * int.Parse(SecondDigit);
-                if (digitsStrings.Length > 2)
+                double total = 1;
+                var digitList = new List<string>(digitsStrings);
+                foreach (string digit in digitList)
                 {
-                    var digitList = new List<string>(digitsStrings);
-                    digitList.RemoveAt(0);
-                    digitList.RemoveAt(1);
-                    int additionalMultiplication = 1;
-                    foreach (string digit in digitList)
-                    {
-
-                        int i = int.Parse(digit);
-                        additionalMultiplication = additionalMultiplication * i;
-                    }
-                    total = total * additionalMultiplication;
+                    double i = double.Parse(digit);
+                    total = total * i;
                 }
-
                 return total;
             }
             return 0;
@@ -125,28 +111,25 @@ namespace Calculator
             return false;
         }
 
-        public int DivideNumbers(string input)
+        public double DivideNumbers(string input)
         {
             input = input.Trim();
             if (!string.IsNullOrEmpty(input) && InputIsDivision(input))
             {
                 string[] digitsStrings = input.Split('/');
                 string firstDigit = digitsStrings[0];
-                string SecondDigit = digitsStrings[1];
-                int total = int.Parse(firstDigit) / int.Parse(SecondDigit);
+                string secondDigit = digitsStrings[1];
+                double total = double.Parse(firstDigit) / double.Parse(secondDigit);
                 if (digitsStrings.Length > 2)
                 {
                     var digitList = new List<string>(digitsStrings);
                     digitList.RemoveAt(0);
-                    digitList.RemoveAt(1);
-                    int additionalDivision = 1;
+                    digitList.RemoveAt(0);
                     foreach (string digit in digitList)
                     {
-
-                        int i = int.Parse(digit);
-                        additionalDivision = additionalDivision / i;
+                        double i = double.Parse(digit);
+                        total = total / i;
                     }
-                    total = total * additionalDivision;
                 }
 
                 return total;
@@ -154,7 +137,43 @@ namespace Calculator
             return 0;
         }
 
-        public ICollection<string> IsolateBodmasBrakets(string input)
+        public bool InputIsPower(string input)
+        {
+            if (input.Contains("^"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public double CalculatePower(string input)
+        {
+            input = input.Trim();
+            if (!string.IsNullOrEmpty(input) && InputIsPower(input))
+            {
+                string[] digitsStrings = input.Split('^');
+                string firstDigit = digitsStrings[0];
+                string secondDigit = digitsStrings[1];
+                double total = Math.Pow(double.Parse(firstDigit), double.Parse(secondDigit));
+                if (digitsStrings.Length > 2)
+                {
+                    var digitList = new List<string>(digitsStrings);
+                    digitList.RemoveAt(0);
+                    digitList.RemoveAt(0);
+                    foreach (string digit in digitList)
+                    {
+                        double i = double.Parse(digit);
+                        total = Math.Pow(total, i);
+                    }
+                }
+
+                return total;
+            }
+            return 0;
+            
+        }
+
+        public ICollection<string> ExtractBodmasBrakets(string input)
         {
             input = input.Trim();
             if (input.Contains("[") & input.Contains("]"))
@@ -166,34 +185,40 @@ namespace Calculator
                      .ToList();
                 return braketcalculations;
             }
-            List<string> emptyCollection = new  List<string>();
+            List<string> emptyCollection = new List<string>();
             return emptyCollection;
         }
 
-        public int GetResultFromSingleStringCalculation(string input)
+        public double GetResultFromSingleCalculation(string input)
         {
-                int calculationResult = 0;
-                if (InputIsAddtion(input))
-                    calculationResult = AddNumbers(input);
-                else if (InputIsSubtraction(input))
-                    calculationResult = SubtractNumbers(input);
-                else if (InputIsMultiplication(input))
+                double calculationResult = 0;
+            if (InputIsPower(input))
+                calculationResult = CalculatePower(input);
+                if (InputIsMultiplication(input))
                     calculationResult = MultiplyNumbers(input);
                 else if (InputIsDivision(input))
                     calculationResult = DivideNumbers(input);
+                else if (InputIsAddtion(input))
+                    calculationResult = AddNumbers(input);
+                else if (InputIsSubtraction(input))
+                    calculationResult = SubtractNumbers(input);
             return calculationResult;
         }
 
-        public ICollection<int> BracketIsolationCalculation(string input)
+        public string BracketIsolationCalculation(string input)
         {
-            ICollection<string> bracketCalcualtions = IsolateBodmasBrakets(input);
-            ICollection<int> integerResults = new List<int>();
+            ICollection<string> bracketCalcualtions = ExtractBodmasBrakets(input);
+            ICollection<double> results = new List<double>();
             foreach (var bracketCalculation in bracketCalcualtions)
             {
-                int result = GetResultFromSingleStringCalculation(bracketCalculation);
-                integerResults.Add(result);
+                double result = GetResultFromSingleCalculation(bracketCalculation);
+                results.Add(result);
             }
-            return integerResults;
+            //  TODO:add each result from results back into [] in input and return
+            return "";
         }
+
+
+       
     }
 }
