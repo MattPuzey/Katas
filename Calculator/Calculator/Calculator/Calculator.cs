@@ -2,10 +2,14 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 
 
@@ -173,6 +177,14 @@ namespace Calculator
             
         }
 
+        public bool ContainsBrackets(string input)
+        {
+            if (input.Contains("[") & input.Contains("]"))
+            {
+                return true;
+            }
+            return false;
+        }
         public ICollection<string> ExtractBodmasBrakets(string input)
         {
             input = input.Trim();
@@ -208,17 +220,26 @@ namespace Calculator
         public string BracketIsolationCalculation(string input)
         {
             ICollection<string> bracketCalcualtions = ExtractBodmasBrakets(input);
-            ICollection<double> results = new List<double>();
-            foreach (var bracketCalculation in bracketCalcualtions)
+            ICollection<string> results = bracketCalcualtions.Select(bracketCalculation => GetResultFromSingleCalculation(bracketCalculation)
+                .ToString())
+                .ToList();
+            var regex = new Regex(@"\[([^]]*)\]");
+             string operationwithBracketsCalculated = input;
+            foreach (Match match in regex.Matches(input))
             {
-                double result = GetResultFromSingleCalculation(bracketCalculation);
-                results.Add(result);
+                string operationResult = results.First();
+                results.Remove(operationResult);
+                string stringMatchOfBracket = match.ToString().Replace("{", "").Replace("}", "");
+                operationwithBracketsCalculated = operationwithBracketsCalculated.Replace(stringMatchOfBracket, operationResult);
+                if (!results.Any())
+                    return operationwithBracketsCalculated;
             }
-            //  TODO:add each result from results back into [] in input and return
-            return "";
+            return input;
         }
 
-
-       
+        public string GroupCalculationsWithBodmasBrackets(string s)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

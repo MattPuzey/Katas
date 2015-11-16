@@ -102,11 +102,18 @@ namespace Calculator
         }
 
         [Test]
-        public void BraketCalculationsAreHandledFirstThenFedBackIntoString()
+        public void BracketCalculationsAreHandledFirstThenFedBackIntoString()
         {
-            string result = _calc.BracketIsolationCalculation("3 + [3 x 2]");
-            StringAssert.AreEqualIgnoringCase("3 + 6", result);
-        } 
+            string result = _calc.BracketIsolationCalculation("3 + [3 x 2] - [4 + 5]");
+            StringAssert.AreEqualIgnoringCase("3 + 6 - 9", result);
+        }
+
+        [Test]
+        public void UseBodmasToGroupMixedOperatorCalculations()
+        {
+            string result = _calc.GroupCalculationsWithBodmasBrackets("3 x 4 + 2 - 4");
+            StringAssert.AreEqualIgnoringCase("[[3 x 4] + 2] - 1", result);
+        }
      
 
      
